@@ -1,6 +1,6 @@
 # Eagle-pnginfo (Library switch ver.)
 
-[English README](README.md)
+[日本語 README](README.ja.md)
 
 - This extension adds the functionality to switch libraries in [Eagle-pnginfo](https://github.com/bbc-mc/sdweb-eagle-pnginfo).
 
