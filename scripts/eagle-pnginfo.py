@@ -7,6 +7,7 @@ from modules import paths, script_callbacks, shared
 from scripts.eagleapi import api_application
 from scripts.eagleapi import api_item
 from scripts.eagleapi import api_util
+from scripts.eagleapi import api_library
 from scripts.parser import Parser
 from scripts.tag_generator import TagGenerator
 
@@ -30,6 +31,8 @@ def on_ui_settings():
     shared.opts.add_option("additional_tags_to_eagle", shared.OptionInfo("", "Additinal tag pattern", section=("eagle_pnginfo", "Eagle Pnginfo")))
     # txt: server_url
     shared.opts.add_option("outside_server_url_port", shared.OptionInfo("", "Outside Eagle server connection (url:port)", section=("eagle_pnginfo", "Eagle Pnginfo")))
+    # txt: Eagle library path
+    shared.opts.add_option("eagle_library_path", shared.OptionInfo("", "Eagle library path", section=("eagle_pnginfo", "Eagle Pnginfo")))
     # specify Eagle folderID
     shared.opts.add_option("save_to_eagle_folderid", shared.OptionInfo("", "(option) FolderID or FolderName on Eagle", component_args=shared.hide_dirs, section=("eagle_pnginfo", "Eagle Pnginfo")))
     # specify Eagle folderID
@@ -72,6 +75,11 @@ def on_image_saved(params:script_callbacks.ImageSaveParams):
             _ret = api_util.find_or_create_folder(folder_name_or_id, allow_create_new_folder, server_url, port)
             return _ret
 
+        def _switch_library(librarypath, server_url="http://localhost", port=41595):
+            if librarypath != "":
+                _ret = api_library.switch(librarypath, server_url, port)
+                return _ret
+
         # send to Eagle
         if shared.opts.outside_server_url_port != "" and api_application.is_valid_url_port(shared.opts.outside_server_url_port):
             # send by URL
@@ -83,6 +91,7 @@ def on_image_saved(params:script_callbacks.ImageSaveParams):
                     annotation=annotation
                 )
             server_url, port = api_util.get_url_port(shared.opts.outside_server_url_port)
+            _switch_library(shared.opts.eagle_library_path, server_url=server_url, port=port)
             folderId = _get_folderId(shared.opts.save_to_eagle_folderid, shared.opts.allow_to_create_folder_on_eagle, server_url=server_url, port=port)
             _ret = api_item.add_from_URL_base64(
                 item,
@@ -99,6 +108,7 @@ def on_image_saved(params:script_callbacks.ImageSaveParams):
                 annotation=annotation,
                 tags=tags
             )
+            _switch_library(shared.opts.eagle_library_path)
             folderId = _get_folderId(shared.opts.save_to_eagle_folderid, shared.opts.allow_to_create_folder_on_eagle)
             _ret = api_item.add_from_path(
                 item=item,
