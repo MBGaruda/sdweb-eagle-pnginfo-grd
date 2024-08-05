@@ -6,9 +6,6 @@ def switch(librarypath, server_url="http://localhost", port=41595, timeout_conne
     """EAGLE API:/api/library/switch
 
     Method: POST
-
-    Returns:
-        Response: return of requests.post
     """
     API_URL = f"{server_url}:{port}/api/library/switch"
 
@@ -22,3 +19,15 @@ def switch(librarypath, server_url="http://localhost", port=41595, timeout_conne
     r_post = requests.post(API_URL, json=data, timeout=(timeout_connect, timeout_read))
 
     return r_post
+
+def info(server_url="http://localhost", port=41595, timeout_connect=3, timeout_read=10):
+    """EAGLE API:/api/library/info
+
+    Method: GET
+    """
+
+    API_URL = f"{server_url}:{port}/api/library/info"
+
+    r_get = requests.get(API_URL, timeout=(timeout_connect, timeout_read))
+
+    return r_get

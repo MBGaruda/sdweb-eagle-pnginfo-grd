@@ -71,14 +71,17 @@ def on_image_saved(params:script_callbacks.ImageSaveParams):
             if _tags and len(_tags) > 0:
                 tags += _tags
 
-        def _get_folderId(folder_name_or_id, allow_create_new_folder, server_url="http://localhost", port=41595):
-            _ret = api_util.find_or_create_folder(folder_name_or_id, allow_create_new_folder, server_url, port)
-            return _ret
-
         def _switch_library(librarypath, server_url="http://localhost", port=41595):
             if librarypath != "":
                 _ret = api_library.switch(librarypath, server_url, port)
+                api_util.print_response(_ret)
+                _retinfo = api_library.info(server_url, port)
+                api_util.print_response(_retinfo)
                 return _ret
+
+        def _get_folderId(folder_name_or_id, allow_create_new_folder, server_url="http://localhost", port=41595):
+            _ret = api_util.find_or_create_folder(folder_name_or_id, allow_create_new_folder, server_url, port)
+            return _ret
 
         # send to Eagle
         if shared.opts.outside_server_url_port != "" and api_application.is_valid_url_port(shared.opts.outside_server_url_port):
