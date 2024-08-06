@@ -73,7 +73,7 @@ def on_image_saved(params:script_callbacks.ImageSaveParams):
 
         def _switch_library(librarypath, server_url="http://localhost", port=41595):
             if librarypath != "":
-                _ret = api_library.switch(librarypath, server_url, port)
+                _ret = api_library.change_library(librarypath, server_url, port)
                 return _ret
 
         def _get_folderId(folder_name_or_id, allow_create_new_folder, server_url="http://localhost", port=41595):
